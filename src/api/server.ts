@@ -3,17 +3,10 @@ let userId = localStorage.getItem('uuid') // represent the customer for our API 
 
 
 
-// put all our API calls in 1 giant dictionary/object
 
 export const serverCalls = {
     
     getShop: async () => {
-        // api call consist of 1-5 things
-        // 1. url ( required )
-        // 2. headers ( optional ) //typically there
-        // 3. parameters ( optional )
-        // 4. body ( optional ) //usually on POST requests
-        // 5. methods (GET, POST, PUT, DELETE)
         const response = await fetch(`https://rangers138-shopmm.onrender.com/api/shop`, {
             method: 'GET',
             headers: {
