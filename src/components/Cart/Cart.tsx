@@ -10,9 +10,6 @@ import {
     Grid,
     Box,
     Button,
-    Dialog,
-    DialogContent,
-    DialogContentText,
     Stack,
     Typography,
     Snackbar,
@@ -26,12 +23,17 @@ import AvTimerIcon from '@mui/icons-material/AvTimer';
 //internal imports
 import {NavBar } from '../sharedComponents';
 import { theme } from '../../Theme/themes';
-import { ShopProps, useGetOrder } from '../../customHooks';
+import { ShopProps } from '../../customHooks';
 import { shopStyles } from '../Shop';
 import { serverCalls } from '../../api'; 
 import { MessageType } from '../Auth'; 
 import { Order } from '../Order';
 
+
+
+export interface CreateOrderProps{
+    order: ShopProps[]
+}
 //
 export const Cart = () => {
     //setup our hooks
