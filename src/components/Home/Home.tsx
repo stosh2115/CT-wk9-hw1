@@ -46,7 +46,7 @@ export const Home = (props: Props) => {
             <Main>
                 <MainText>
                     <Typography variant='h3'> { props.title }</Typography>
-                    <Button sx={{ marginTop: '10px'}} component={Link} to={myAuth === 'true' ? "/shoop" : "/auth"} variant='contained'>Alohomora if you so choose</Button>
+                    <Button sx={{ marginTop: '10px'}} component={Link} to={myAuth === 'true' ? "/shop" : "/auth"} variant='contained'>Alohomora if you so choose</Button>
                 </MainText>
             </Main>
         </Root>

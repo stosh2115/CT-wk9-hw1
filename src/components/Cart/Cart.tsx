@@ -26,10 +26,11 @@ import AvTimerIcon from '@mui/icons-material/AvTimer';
 //internal imports
 import {NavBar } from '../sharedComponents';
 import { theme } from '../../Theme/themes';
-import { ShopProps } from '../../customHooks';
+import { ShopProps, useGetOrder } from '../../customHooks';
 import { shopStyles } from '../Shop';
 import { serverCalls } from '../../api'; 
 import { MessageType } from '../Auth'; 
+import { Order } from '../Order';
 
 //
 export const Cart = () => {
@@ -123,16 +124,49 @@ export const Cart = () => {
         })
     }
 
+    const checkout = async () => {
+
+        const data: CreateOrderProps = {
+            'order': currentCart as ShopProps[]
+        }
+
+        const response = await serverCalls.createOrder(data)
+
+        if (response.status === 200) { //200 is a good status code
+            remove(cartRef) //this is removing our whole entire cartRef aka emptying our cart
+                .then(() => {
+                    console.log("Cart cleared successfully")
+                    setMessage('Successfully Checkout')
+                    setMessageType('success')
+                    setOpen(true)
+                    setTimeout(() => { window.location.reload() }, 2000)
+                })
+                .catch((error) => {
+                    console.log("Error clearing cart: " + error.message)
+                    setMessage(error.message)
+                    setMessageType('error')
+                    setOpen(true)
+                    setTimeout(() => { window.location.reload() }, 2000)
+                })
+        } else {
+            setMessage('Error with your Checkout')
+            setMessageType('error')
+            setOpen(true)
+            setTimeout(() => { window.location.reload() }, 2000)
+        }
+
+    }
+
 
     return (
         <Box sx={shopStyles.main}>
             <NavBar />
-            <Stack direction='column' sx={shopStyles.main}>
+            <Stack direction='column' sx={shopStyles.main} alignItems ='center'>
                 <Stack
                     direction='row'
                     alignItems='center'
-                    justifyContent='space-between'
-                    sx={{ marginTop: '100px', marginLeft: '200px', width: '400px'}}
+                    justifyContent='start'
+                    sx={{ marginTop: '100px', width: '100%', marginLeft: '400px'}}
                 >
                     <Typography variant='h4' sx={{marginRight: '20px'}}>
                         Your Cart
@@ -140,9 +174,8 @@ export const Cart = () => {
                     <Button
                         variant='contained'
                         color='primary'
-                        onClick={()=> {}}
-                        sx={{ width: '150px'}}
-
+                        onClick={ checkout }
+                        sx={{ width: '150px' }}
                     >
                         Checkout <AvTimerIcon />
                     </Button>
@@ -213,16 +246,18 @@ export const Cart = () => {
                                         >
                                             Delete Item from Cart
                                         </Button>
-
-
-
                                     </Stack>
                                 </CardContent>
                             </Card>
                         </Grid>
                     ))}
                 </Grid>
-                
+                <Stack direction='column' sx={{ width: '75%', marginTop: '100px'}}> 
+                    <Typography variant='h4' sx={{marginRight: '20px'}}>
+                        Your Orders
+                    </Typography>
+                    <Order />
+                </Stack>
             </Stack>
             <Snackbar 
                 open={open}
@@ -233,7 +268,6 @@ export const Cart = () => {
                     {message}
                 </Alert>
             </Snackbar>
-
         </Box>
     )
 }
